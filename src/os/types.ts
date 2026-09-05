@@ -12,7 +12,8 @@ export type AppId =
   | 'tasks' 
   | 'settings' 
   | 'browser' 
-  | 'media';
+  | 'media'
+  | 'gemini';
 
 export interface AppConfig {
   id: AppId;

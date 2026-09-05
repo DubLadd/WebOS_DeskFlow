@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { WindowState } from '../types';
 import { cn } from '@blinkdotnew/ui';
-import { Settings as SettingsIcon, Monitor, Palette, User, Bell, Shield, Info, Image as ImageIcon } from 'lucide-react';
+import { Settings as SettingsIcon, Monitor, Palette, User, Bell, Shield, Info, Image as ImageIcon, KeyRound, TerminalSquare, Eye, EyeOff } from 'lucide-react';
 
 const WALLPAPERS = [
   'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=2560',
@@ -13,6 +13,14 @@ const WALLPAPERS = [
 
 export const Settings: React.FC<{ window: WindowState }> = () => {
   const [activeTab, setActiveTab] = useState('display');
+  const [geminiKey, setGeminiKey] = useState(() => localStorage.getItem('deskflow-gemini-key') || '');
+  const [githubToken, setGithubToken] = useState(() => localStorage.getItem('deskflow-github-token') || '');
+  const [showSecrets, setShowSecrets] = useState(false);
+
+  const saveCliCredentials = () => {
+    localStorage.setItem('deskflow-gemini-key', geminiKey);
+    localStorage.setItem('deskflow-github-token', githubToken);
+  };
   
   const handleWallpaperChange = (url: string) => {
     // This is just a simulation, in a real app we'd use a global state or context
@@ -44,6 +52,7 @@ export const Settings: React.FC<{ window: WindowState }> = () => {
         <SidebarItem id="account" icon={User} label="Accounts" />
         <SidebarItem id="notifications" icon={Bell} label="Notifications" />
         <SidebarItem id="security" icon={Shield} label="Security" />
+        <SidebarItem id="cli" icon={TerminalSquare} label="CLI & AI" />
         <div className="flex-1" />
         <SidebarItem id="about" icon={Info} label="About OS" />
       </div>
@@ -122,7 +131,22 @@ export const Settings: React.FC<{ window: WindowState }> = () => {
           </div>
         )}
 
-        {activeTab !== 'display' && activeTab !== 'about' && (
+        {activeTab === 'cli' && (
+          <div className="max-w-xl space-y-6 animate-fade-in">
+            <div>
+              <h2 className="flex items-center gap-3 text-2xl font-bold"><KeyRound className="text-primary" /> CLI & AI Credentials</h2>
+              <p className="mt-2 text-sm text-muted-foreground">Configure credentials used by your local DeskFlow tools. Values are stored in this browser only.</p>
+            </div>
+            <div className="space-y-5 rounded-2xl border border-white/10 bg-white/5 p-6">
+              <label className="block space-y-2"><span className="text-sm font-semibold">Gemini API key</span><input type={showSecrets ? 'text' : 'password'} value={geminiKey} onChange={(event) => setGeminiKey(event.target.value)} placeholder="Paste your Gemini key" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm outline-none focus:border-primary/60" /></label>
+              <label className="block space-y-2"><span className="text-sm font-semibold">GitHub token (gh)</span><input type={showSecrets ? 'text' : 'password'} value={githubToken} onChange={(event) => setGithubToken(event.target.value)} placeholder="Paste a GitHub token" className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm outline-none focus:border-primary/60" /></label>
+              <div className="flex items-center justify-between gap-3"><button onClick={() => setShowSecrets((value) => !value)} className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground">{showSecrets ? <EyeOff size={14} /> : <Eye size={14} />} {showSecrets ? 'Hide' : 'Show'} values</button><button onClick={saveCliCredentials} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:scale-105 active:scale-95">Save locally</button></div>
+            </div>
+            <div className="rounded-xl border border-amber-300/20 bg-amber-300/10 p-4 text-xs leading-relaxed text-amber-100">Security note: this browser OS is a simulation. Credentials are never used to execute real shell commands, and these fields are not sent to a server. Do not paste production secrets into a public/shared browser.</div>
+          </div>
+        )}
+
+        {activeTab !== 'display' && activeTab !== 'about' && activeTab !== 'cli' && (
           <div className="flex flex-col items-center justify-center h-full text-center opacity-50">
              <h2 className="text-xl font-bold mb-2">Section Under Construction</h2>
              <p className="text-sm">We're working hard to bring this feature to DeskFlow OS.</p>

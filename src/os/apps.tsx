@@ -26,6 +26,7 @@ import { WebBrowser } from '../apps/WebBrowser';
 import { PixelPaint } from '../apps/PixelPaint';
 import { MediaPlayer } from '../apps/MediaPlayer';
 import { CodeStudio } from '../apps/CodeStudio';
+import { GeminiCLI } from '../apps/GeminiCLI';
 
 export const APPS: AppConfig[] = [
   { id: 'explorer', name: 'File Explorer', icon: <FolderOpen />, component: Explorer },
@@ -40,4 +41,5 @@ export const APPS: AppConfig[] = [
   { id: 'settings', name: 'Settings', icon: <SettingsIcon />, component: Settings, width: 800, height: 600, singleton: true },
   { id: 'browser', name: 'Web Browser', icon: <Globe />, component: WebBrowser, width: 1000, height: 750 },
   { id: 'media', name: 'Media Player', icon: <PlayCircle />, component: MediaPlayer, width: 500, height: 400 },
+  { id: 'gemini', name: 'Gemini CLI', icon: <Bot />, component: GeminiCLI, width: 720, height: 560 },
 ];
